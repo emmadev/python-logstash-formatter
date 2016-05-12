@@ -108,37 +108,3 @@ The following keys will be found in the output JSON:
     "@source_host": "phoenix.spootnik.org",
     "@timestamp": "2013-05-02T09:39:48.013158"
   }
-
-
-Sample output for LogstashFormatterV1
--------------------------------------
-
-The following keys will be found in the output JSON:
-
-* ``@timestamp``: ISO 8601 timestamp
-* ``@version``: Version of the schema
-
-::
-
-    {"@version": 1,
-     "account": "pyr",
-     "lineno": 1,
-     "levelno": 30,
-     "filename": "test.py",
-     "thread": 140566036444928,
-     "@timestamp": "2015-03-30T09:46:23.000Z",
-     "threadName": "MainThread",
-     "relativeCreated": 51079.52117919922,
-     "process": 10787,
-     "source_host": "phoenix.spootnik.org",
-     "processName": "MainProcess",
-     "pathname": "test.py",
-     "args": [],
-     "module": "test",
-     "msecs": 999.9005794525146,
-     "created": 1427708782.9999006,
-     "name": "root",
-     "stack_info": null,
-     "funcName": "<module>",
-     "levelname": "WARNING",
-     "message": "foo"}
