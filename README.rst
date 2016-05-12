@@ -1,6 +1,10 @@
+PUBLIC REPO
+===========
 logstash_formatter: JSON logs for logstash
 ==========================================
 
+FORK OF https://github.com/exoscale/python-logstash-formatter 
+-------------------------------------------------------------
 This library is provided to allow standard python logging to output log data
 as json objects ready to be shipped out to logstash.
 
