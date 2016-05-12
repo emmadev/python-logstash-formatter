@@ -56,8 +56,12 @@ class LogstashFormatter(logging.Formatter):
         else:
             try:
                 self.source_host = socket.gethostname()
-            except:
+            except Exception:
                 self.source_host = ""
+        try:
+            self.host = socket.gethostbyname(socket.gethostname())
+        except Exception:
+            self.host = ''
 
     def format(self, record):
         """
@@ -104,6 +108,7 @@ class LogstashFormatter(logging.Formatter):
         logr.update({'@message': msg,
                      '@timestamp': datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
                      '@source_host': self.source_host,
+                     '@host': self.host,
                      '@fields': self._build_fields(logr, fields)})
 
         return json.dumps(logr, default=self.json_default, cls=self.json_cls)
