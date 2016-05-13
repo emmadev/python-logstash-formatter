@@ -100,8 +100,7 @@ class LogstashFormatter(logging.Formatter):
             fields.pop('message')
 
         if 'levelname' in fields:
-            loglevel = fields.get('levelname', '')
-            fields.pop('levelname')
+            loglevel = fields.pop('levelname')
         else:
             loglevel = ''
 
