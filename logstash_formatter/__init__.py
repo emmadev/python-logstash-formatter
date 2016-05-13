@@ -89,14 +89,14 @@ class LogstashFormatter(logging.Formatter):
             fields['exception'] = formatted
 
         loglevel = fields.pop('levelname', '')
-        
+
         worker_guid = fields.pop('name', '')
 
         unwanted_tags = ['message', 'exc_text', 'exc_info', 'msg', 'lineno', 'filename', 'funcName', 'levelno',
                          'module', 'msecs', 'pathname', 'process', 'processName', 'relativeCreated', 'thread',
                          'threadName']
         for tag in unwanted_tags:
-            fields.pop(tag)
+            fields.pop(tag, '')
 
         logr = self.defaults.copy()
 
