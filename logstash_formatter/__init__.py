@@ -100,14 +100,16 @@ class LogstashFormatter(logging.Formatter):
             fields.pop('message')
 
         if 'levelname' in fields:
-            fields['loglevel'] = fields.get('levelname', '')
-            fields.pop('levelname')
+            loglevel = fields.pop('levelname')
+        else:
+            loglevel = ''
 
         logr = self.defaults.copy()
 
         logr.update({'@message': msg,
                      '@timestamp': datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
                      '@source_host': self.source_host,
+                     'loglevel': loglevel,
                      '@host': self.host,
                      '@fields': self._build_fields(logr, fields)})
 
