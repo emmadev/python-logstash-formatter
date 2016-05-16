@@ -84,25 +84,19 @@ class LogstashFormatter(logging.Formatter):
         except (KeyError, IndexError):
             pass
 
-        if 'msg' in fields:
-            fields.pop('msg')
+        if fields.get('exc_info'):
+            formatted = tb.format_exception(*fields['exc_info'])
+            fields['exception'] = formatted
 
-        if 'exc_info' in fields:
-            if fields['exc_info']:
-                formatted = tb.format_exception(*fields['exc_info'])
-                fields['exception'] = formatted
-            fields.pop('exc_info')
+        loglevel = fields.pop('levelname', '')
 
-        if 'exc_text' in fields:
-            fields.pop('exc_text')
+        worker_guid = fields.pop('name', '')
 
-        if 'message' in fields:
-            fields.pop('message')
-
-        if 'levelname' in fields:
-            loglevel = fields.pop('levelname')
-        else:
-            loglevel = ''
+        unwanted_tags = ['message', 'exc_text', 'exc_info', 'msg', 'lineno', 'filename', 'funcName', 'levelno',
+                         'module', 'msecs', 'pathname', 'process', 'processName', 'relativeCreated', 'thread',
+                         'threadName']
+        for tag in unwanted_tags:
+            fields.pop(tag, '')
 
         logr = self.defaults.copy()
 
@@ -110,6 +104,8 @@ class LogstashFormatter(logging.Formatter):
                      '@timestamp': datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
                      '@source_host': self.source_host,
                      'loglevel': loglevel,
+                     'worker_guid': worker_guid,
+                     'logging_type': 'redis',
                      '@host': self.host,
                      '@fields': self._build_fields(logr, fields)})
 
