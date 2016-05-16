@@ -84,7 +84,7 @@ class LogstashFormatter(logging.Formatter):
         except (KeyError, IndexError):
             pass
 
-        if fields['exc_info']:
+        if fields.get('exc_info', None):
             formatted = tb.format_exception(*fields['exc_info'])
             fields['exception'] = formatted
 
