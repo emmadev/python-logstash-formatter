@@ -6,8 +6,8 @@ def read(*parts):
     return codecs.open(path.join(path.dirname(__file__), *parts),
                        encoding="utf-8").read()
 
-setup(name='logstash_formatter',
-      version='0.5.15',
+setup(name='logstash-formatter',
+      version='1.0.0',
       description='JSON formatter meant for logstash',
       long_description=read('README.rst'),
       url='https://github.com/exoscale/python-logstash-formatter',
