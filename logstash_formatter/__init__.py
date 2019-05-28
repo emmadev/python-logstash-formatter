@@ -9,6 +9,7 @@ import datetime
 import traceback as tb
 import json
 
+
 def _default_json_default(obj):
     """
     Coerce everything to strings.
@@ -18,6 +19,7 @@ def _default_json_default(obj):
         return obj.isoformat()
     else:
         return str(obj)
+
 
 class LogstashFormatter(logging.Formatter):
     """
@@ -46,7 +48,17 @@ class LogstashFormatter(logging.Formatter):
         else:
             self._fmt = {}
         self.json_default = json_default
-        self.json_cls = json_cls
+        if isinstance(json_cls, str):
+            if json_cls != '%':
+                cls = self._resolve(json_cls)
+                if cls:
+                    self.json_cls = cls
+                else:
+                    self.json_cls = None
+            else:
+                json_cls = None
+        else:
+            self.json_cls = json_cls
         if 'extra' not in self._fmt:
             self.defaults = {}
         else:
@@ -62,6 +74,20 @@ class LogstashFormatter(logging.Formatter):
             self.host = socket.gethostbyname(socket.gethostname())
         except Exception:
             self.host = ''
+
+    def _resolve(self, name):
+        """Resolve a dotted name to a global object."""
+        name = name.split('.')
+        used = name.pop(0)
+        found = __import__(used)
+        for n in name:
+            used = used + '.' + n
+            try:
+                found = getattr(found, n)
+            except AttributeError:
+                __import__(used)
+                found = getattr(found, n)
+        return found
 
     def format(self, record):
         """

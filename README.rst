@@ -44,7 +44,7 @@ The LogstashFormatter may take the following named parameters:
   * ``extra``: provide extra fields always present in logs.
   * ``source_host``: override source host name.
 
-* ``json_cls``: JSON encoder to forward to ``json.dump``.
+* ``json_cls``: JSON encoder to forward to ``json.dump``, you can also pass it a dot separated string class (this is used for fileconfig)
 * ``json_default``: Default JSON representation for unknown types,
   by default coerce everything to a string.
 
