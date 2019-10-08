@@ -104,12 +104,18 @@ class LogstashFormatter(logging.Formatter):
             if isinstance(fields["args"], list):
                 new_list = [repr(arg) for arg in fields["args"]]
                 fields["args"] = new_list
+            elif isinstance(fields["args"], tuple):
+                new_list = [repr(arg) for arg in list(fields["args"])]
+                fields["args"] = new_list
             else:
                 fields["args"] = [repr(fields["args"])]
 
         if fields.get("job", {}).get("args"):
             if isinstance(fields["job"]["args"], list):
                 new_list = [repr(arg) for arg in fields["job"]["args"]]
+                fields["job"]["args"] = new_list
+            elif isinstance(fields["job"]["args"], tuple):
+                new_list = [repr(arg) for arg in list(fields["job"]["args"])]
                 fields["job"]["args"] = new_list
             else:
                 fields["job"]["args"] = [repr(fields["job"]["args"])]
