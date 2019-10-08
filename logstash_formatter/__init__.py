@@ -9,6 +9,7 @@ import datetime
 import traceback as tb
 import json
 
+
 def _default_json_default(obj):
     """
     Coerce everything to strings.
@@ -18,6 +19,7 @@ def _default_json_default(obj):
         return obj.isoformat()
     else:
         return str(obj)
+
 
 class LogstashFormatter(logging.Formatter):
     """
@@ -40,7 +42,6 @@ class LogstashFormatter(logging.Formatter):
         :param json_default: Default JSON representation for unknown types,
                              by default coerce everything to a string
         """
-
         if fmt is not None:
             self._fmt = json.loads(fmt)
         else:
@@ -99,6 +100,19 @@ class LogstashFormatter(logging.Formatter):
             fields.pop(tag, '')
 
         logr = self.defaults.copy()
+        if fields.get("args"):
+            if isinstance(fields["args"], list):
+                new_list = [repr(arg) for arg in fields["args"]]
+                fields["args"] = new_list
+            else:
+                fields["args"] = [repr(fields["args"])]
+
+        if fields.get("job", {}).get("args"):
+            if isinstance(fields["job"]["args"], list):
+                new_list = [repr(arg) for arg in fields["job"]["args"]]
+                fields["job"]["args"] = new_list
+            else:
+                fields["job"]["args"] = [repr(fields["job"]["args"])]
 
         logr.update({'@message': msg,
                      '@timestamp': datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
