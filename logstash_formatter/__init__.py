@@ -8,6 +8,7 @@ import socket
 import datetime
 import traceback as tb
 import json
+import copy
 
 
 def _default_json_default(obj):
@@ -71,7 +72,7 @@ class LogstashFormatter(logging.Formatter):
         fields.
         """
 
-        fields = record.__dict__.copy()
+        fields = copy.deepcopy(record.__dict__)
 
         if isinstance(record.msg, dict):
             fields.update(record.msg)
