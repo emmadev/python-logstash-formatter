@@ -1,0 +1,22 @@
+name: publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: Branch, tag, or SHA to publish.
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    uses: emmadev/.github/.github/workflows/publish-python.yml@main
+    with:
+      python_version: '3.10.20'
+      include_sdist: true
+      source_ref: ${{ inputs.source_ref }}
+      wheel_python_tags: 'py2 py3'
+    secrets: inherit
